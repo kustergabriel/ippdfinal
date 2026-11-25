@@ -85,3 +85,32 @@ time hadoop jar logs.jar Q2 /dados/logs_10m /user/aluno/saida_q2_10mv2
 time hadoop jar logs.jar Q2 /dados/logs_10m /user/aluno/saida_q2_10mv3
 time hadoop jar logs.jar Q3 /dados/logs_10m /user/aluno/saida_q3_10m
 ```
+
+### Paralelismo (Q2 com 1, 2 e 4 map tasks na base de 10M)
+
+```bash
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_1map
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_1mapv2
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_1mapv3
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_2map
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_2mapv2
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_2mapv3
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_4map
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_4mapv2
+hdfs dfs -rm -r -f /user/aluno/saida_q2_10m_4mapv3
+
+# 1 map task (split minimo de 512 MB)
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=536870912 /dados/logs_10m /user/aluno/saida_q2_10m_1map
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=536870912 /dados/logs_10m /user/aluno/saida_q2_10m_1mapv2
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=536870912 /dados/logs_10m /user/aluno/saida_q2_10m_1mapv3
+
+# 2 map tasks (split minimo de 256 MB)
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=268435456 /dados/logs_10m /user/aluno/saida_q2_10m_2map
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=268435456 /dados/logs_10m /user/aluno/saida_q2_10m_2mapv2
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=268435456 /dados/logs_10m /user/aluno/saida_q2_10m_2mapv3
+
+# 4 map tasks (split minimo de 128 MB, padrao)
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=134217728 /dados/logs_10m /user/aluno/saida_q2_10m_4map
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=134217728 /dados/logs_10m /user/aluno/saida_q2_10m_4mapv2
+time hadoop jar logs.jar Q2 -D mapreduce.input.fileinputformat.split.minsize=134217728 /dados/logs_10m /user/aluno/saida_q2_10m_4mapv3
+```
